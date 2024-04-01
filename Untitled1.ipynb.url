@@ -1,6 +1,31 @@
-[InternetShortcut]
-URL=http://localhost:8888/notebooks/Untitled1.ipynb
-IDList=
-HotKey=0
-IconFile=C:\Users\MEENAKSHI\AppData\Local\Mozilla\Firefox\Profiles\o6ph6tgp.default-beta\shortcutCache\RWm2JJh7T40zg1QM_hec3x1IQHbsgbsLWGIPmIqqC7M=.ico
-IconIndex=0
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+numDataSymbols = 10
+fftLen = 64
+cpLen = 16
+
+# Generate random data
+data = np.random.randint(0, 2, (1, numDataSymbols * fftLen))
+
+# OFDM modulation
+ofdmMod = np.fft.ifft(data, fftLen, axis=1)
+ofdmMod = np.hstack((ofdmMod[:, -cpLen:], ofdmMod))
+
+# Plot the waveform
+plt.figure(figsize=(12, 8))
+
+# Plot real part with blue solid line and circle markers
+plt.plot(ofdmMod.real.flatten(), label='Real Part', color='blue', linestyle='-', marker='o', markersize=5)
+
+# Plot imaginary part with red dashed line and square markers
+plt.plot(ofdmMod.imag.flatten(), label='Imaginary Part', color='red', linestyle='--', marker='s', markersize=5)
+
+plt.xlabel('Sample Index')
+plt.ylabel('Amplitude')
+plt.title('OFDM Waveform')
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.7)  # Add grid lines with dashed style and 70% transparency
+plt.tight_layout()
+plt.show()
